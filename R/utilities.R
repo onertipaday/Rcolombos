@@ -304,7 +304,7 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
     #
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
-    curlPerform( url = paste("http://rest.colombos.net/get_entities", organism, annotation, sep="/"),
+    curlPerform( url = paste("http://rest.colombos.net/get_entities", organism, gsub(" ","%20", annotation), sep="/"),
                  .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
                  curl = getCurlHandle(),
                  writefunction = t$update,
