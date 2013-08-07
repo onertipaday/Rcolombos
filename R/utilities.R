@@ -296,7 +296,8 @@ listAnnotationTypes <- function(organism="ecoli"){
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
-#'  bsubt_available_pathway_entities <- listEntities(organism="bsubt", annotation="Pathway")
+#'  pathway_entities <- listEntities(organism="bsubt", annotation="Pathway")
+#'  Tr_entities <- listEntities("bsubt","Transcriptional regulation")
 #' }
 #'
 listEntities <- function(organism="ecoli", annotation="Pathway"){
