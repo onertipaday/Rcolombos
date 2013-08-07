@@ -1,0 +1,5 @@
+export(getCompendium)
+export(listContrasts)
+export(listGenes)
+export(listOrganisms)
+export(quick_search)
