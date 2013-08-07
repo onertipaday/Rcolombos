@@ -66,7 +66,7 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#' @param genes A vector of strings representing the genes of interest.
+#' @param ids A vector of strings representing the genes of interest.
 #' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
 #' @param
 #' @param
@@ -82,22 +82,26 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
-#'  g.gn <- advanced_search(organism="bsubt", gene_ids=c("cgeB","yfnG"), by="genes", search_type="genes")
-#'  g.go <- advanced_search(organism="bsubt", gene_ids="response to antibiotic, transcription", by="genes", search_type="go")
-#'  g.anno <- advanced_search(organism="bsubt", gene_ids="biotin-carboxyl carrier protein assembly", 
+#'  g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", search_type="genes")
+#'  g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", search_type="go")
+#'  g.anno <- advanced_search(organism="bsubt", g_ids="biotin-carboxyl carrier protein assembly", 
 #'  by="genes", search_type="annotation", ann_type="Pathway")
 #'  
+#'  http://rest.colombos.net/advanced_search_by_contrast/bsubt/contrast_names/GSM27217.ch2-vs-GSM27217.ch1,GSM27218.ch1-vs-GSM27218.ch2
+#'  c.cn <- advanced_search(organism="bsubt", c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
+#'  by="contrasts", search_type="contrast_names")
+#'  
 #'  b.gn.cn <- advanced_search(organism="bsubt", gene_ids=c("cgeB","yfnG"), 
-#'  geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2", by="both")
+#'  geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), by="both")
 #'  heatmap(as.matrix(my_module), col=terrain.colors(15))
 #' }
 #'
-advanced_search <- function(organism="bsubt", gene_ids=c("cgeB","yfnG"), geneNames=FALSE, contrast_ids, by="genes", search_type="genes", ann_type){
-    switch(by,
-           genes = advanced_search_by_genes(organism, gene_ids, geneNames, search_type, ann_type),
-           contrasts = "contrasts",
-           both = "both"
-    )
+advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, by="genes", search_type="genes", ann_type){
+    if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
+    if(by=="genes") out <- advanced_search_by_genes(organism, g_ids, geneNames, search_type, ann_type)
+    else if(by=="contrasts") out <- advanced_search_by_contrasts(organism, geneNames, c_ids, search_type="contrast_names", ann_type)
+    else if(by=="both") out <- advanced_search_by_both(organism, g_ids, geneNames, c_ids, search_type, ann_type, cond_type)
+    else stop("Wrong by: it should be either genes, contrasts or both!")
 }
 #' Accessory function (not exposed) allowing the advanced_search by gene_ids, go, annotation
 #'
@@ -127,8 +131,7 @@ advanced_search_by_genes <- function(organism="bsubt", ids=c("cgeB","yfnG"), gen
     }
     else if(search_type=="annotation"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), 
-                            gsub(" ","%20", ids), sep="/")
-        
+                            gsub(" ","%20", ids), sep="/")  
     } else {
         stop("Wrong search_type: it should be either genes, go or annotation!")
     }
@@ -162,7 +165,7 @@ advanced_search_by_genes <- function(organism="bsubt", ids=c("cgeB","yfnG"), gen
 #'
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#' @param ids A vector of strings representing gene_id, go terms or annotation entities according the search type.
+#' @param ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
 #' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
 #' @param search_type A string either genes, go or annotation
 #' @param entity 
@@ -173,23 +176,31 @@ advanced_search_by_genes <- function(organism="bsubt", ids=c("cgeB","yfnG"), gen
 #' @references http://colombos.net
 #'
 #' @export
-#'
-advanced_search_by_contrasts <- function(organism="bsubt", ids=c("cgeB","yfnG"), geneNames=FALSE, search_type="genes", ann_type){
-    #         if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
+#' 
+#' @examples
+#' \dontrun{
+#' c.cn <- advanced_search_by_contrasts(organism="bsubt", 
+#' ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
+#' }
+#' 
+advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, search_type="contrast_names", ann_type){
+    if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
+    if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
-    if(search_type=="genes"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "genes", paste(ids, collapse=","), sep="/")
+    if(search_type=="contrast_names"){
+        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "contrast_names", paste(ids, collapse=","), sep="/")
+    }
+    else if(search_type=="experiment"){
+#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
     }
     else if(search_type=="go"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
+#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
     }
-    else if(search_type=="annotation"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), 
-                            gsub(" ","%20", ids), sep="/")
-        
+    else if(search_type=="condition"){
+#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), gsub(" ","%20", ids), sep="/")
     } else {
-        stop("Wrong search_type: it should be either genes, go or annotation!")
+        stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
     }
     curlPerform( url = url_string,
                  .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
