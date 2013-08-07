@@ -99,7 +99,7 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, by="genes", search_type="genes", ann_type){
     if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
     if(by=="genes") out <- advanced_search_by_genes(organism, g_ids, geneNames, search_type, ann_type)
-    else if(by=="contrasts") out <- advanced_search_by_contrasts(organism, geneNames, c_ids, search_type="contrast_names", ann_type)
+    else if(by=="contrasts") out <- advanced_search_by_contrasts(organism, c_ids, geneNames, search_type="contrast_names", ann_type)
     else if(by=="both") out <- advanced_search_by_both(organism, g_ids, geneNames, c_ids, search_type, ann_type, cond_type)
     else stop("Wrong by: it should be either genes, contrasts or both!")
 }
