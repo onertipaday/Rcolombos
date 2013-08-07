@@ -24,7 +24,7 @@
 #'  heatmap(as.matrix(my_module), col=terrain.colors(15))
 #' }
 #'
-quick_search <- function(organism="coli", genes, geneNames=FALSE){
+quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
   if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
   #
   t <- basicTextGatherer()

@@ -6,7 +6,8 @@ representing the genes of interest for the specified organism,
 and returns a list containing the locustags, gene_names,
 contrasts and M-values for the current selection.}
 \usage{
-  quick_search(organism = "coli", genes, geneNames = FALSE)
+  quick_search(organism = "ecoli", genes,
+    geneNames = FALSE)
 }
 \arguments{
   \item{organism}{A character containing the organism id:

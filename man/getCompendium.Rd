@@ -5,8 +5,9 @@
   getCompendium(organism = "ecoli", path = NULL)
 }
 \arguments{
-  \item{organism}{A string containing the organism of
-  interest.}
+  \item{organism}{A character containing the organism id:
+  use \code{\link{listOrganisms}} to display the available
+  organisms.}
 
   \item{path}{A string indicating the path where the file
   will be either downloaded or read, if already retrieved}

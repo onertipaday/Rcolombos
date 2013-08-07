@@ -6,8 +6,9 @@ and returns a character vector corresponding to the currently available organism
   listContrasts(organism = "ecoli")
 }
 \arguments{
-  \item{organism}{A string containing the organism of
-  interest.}
+  \item{organism}{A character containing the organism id:
+  use \code{\link{listOrganisms}} to display the available
+  organisms.}
 }
 \value{
   A data.frame containing the contrasts and GSM of all the

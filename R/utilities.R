@@ -42,7 +42,8 @@ listOrganisms <- function(){
 #' This method takes as parameter a single string, representing an organism,
 #' and returns a character vector corresponding to the currently available organisms.
 #'
-#' @param organism A string containing the organism of interest.
+#' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
 #'
 #' @return A data.frame containing the locustag and description
 #' of all the genes for the selected organism.
@@ -87,7 +88,8 @@ listGenes <- function(organism="ecoli"){
 #' This method takes as parameter a single string, representing an organism,
 #' and returns a character vector corresponding to the currently available organisms.
 #'
-#' @param organism A string containing the organism of interest.
+#' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
 #'
 #' @return A data.frame containing the contrasts and GSM
 #' of all the contrasts for the selected organism.
@@ -131,7 +133,8 @@ listContrasts <- function(organism="ecoli"){
 
 #' This method allows to download/import the full compendium for the selected organism
 #'
-#' @param organism A string containing the organism of interest.
+#' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
 #'
 #' @param path A string indicating the path where the file will be either downloaded or read,
 #' if already retrieved
@@ -180,4 +183,144 @@ getCompendium <- function(organism="ecoli", path=NULL){
     out <- out[,c(2:dim(out)[[2]])] 
     colnames(out) = my_cols; out <- out[,c(2:dim(out)[[2]])]
   }    
+}
+
+#' This method takes as parameter a single string, representing an organism,
+#' and returns a character vector corresponding to the currently available organisms.
+#'
+#' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
+#'
+#' @return A data.frame containing the locustag and description
+#' of all the genes for the selected organism.
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library('Rcolombos')
+#' listGenes()
+#' }
+#'
+listGenes <- function(organism="ecoli"){
+    header.field = c('Content-Type' = "application/json")
+    curl <- getCurlHandle() 
+    curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
+    t <- basicTextGatherer()
+    h <- basicHeaderGatherer()
+    body = curlPerform(url=paste("http://rest.colombos.net/get_genes/", organism, sep=""),
+                       curl = curl,
+                       writefunction = t$update,
+                       headerfunction = h$update)
+    output <- list(data = t$value(),
+                   status = h$value()[['status']],
+                   status.message = h$value()[['statusMessage']])
+    httpstatus <- as.numeric(output$status)
+    if (httpstatus != 200) {
+        return(output$status.message)
+    } else {
+        tmp <- fromJSON(output$data, nullValue = NA)$data;
+        response <- data.frame(matrix(unlist(tmp, recursive=F), length(tmp), 2, byrow=T))
+        for (i in 1:2) {
+            response[,i] <- sapply(response[,i], as.character) # sanitize the list in the df
+        }
+        colnames(response) <- c("locustag", "gene_name")
+        return(response)
+    }
+}
+
+#' This method takes as parameter a string (the nickname of an organism) and returns a character vector 
+#' corresponding to the currently available annotation type for the selected organism.
+#'
+#' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
+#'
+#' @return A data.frame containing the name and description of the annotation
+#' for the selected organism.
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library('Rcolombos')
+#' listAnnotationTypes()
+#' }
+#'
+listAnnotationTypes <- function(organism="ecoli"){
+    header.field = c('Content-Type' = "application/json")
+    curl <- getCurlHandle() 
+    curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
+    t <- basicTextGatherer()
+    h <- basicHeaderGatherer()
+    body = curlPerform(url=paste("http://rest.colombos.net/get_annotation_types/", organism, sep=""),
+                       curl = curl,
+                       writefunction = t$update,
+                       headerfunction = h$update)
+    output <- list(data = t$value(),
+                   status = h$value()[['status']],
+                   status.message = h$value()[['statusMessage']])
+    httpstatus <- as.numeric(output$status)
+    if (httpstatus != 200) {
+        return(output$status.message)
+    } else {
+        tmp <- fromJSON(output$data, nullValue = NA)$data;
+        response <- data.frame(matrix(unlist(tmp, recursive=F), length(tmp), 2, byrow=T))
+        for (i in 1:2) {
+            response[,i] <- sapply(response[,i], as.character) # sanitize the list in the df
+        }
+        colnames(response) <- c("name", "description")
+        return(response)
+    }
+}
+
+#' This method takes a string containing the nickname for the selected organism and a vector of string, 
+#' representing the genes of interest for the specified organism, 
+#' and returns a list containing the locustags, gene_names, 
+#' contrasts and M-values for the current selection.
+#'
+#' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
+#' @param annotation A character containing the selected annotation type: use \code{\link{listAnnotationTypes}} to display
+#' the available types.
+#' 
+#' @return A vector containing the available entities for the selected annotation type.
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'  library("Rcolombos")
+#'  bsubt_available_pathway_entities <- listEntities(organism="bsubt", annotation="Pathway")
+#' }
+#'
+listEntities <- function(organism="ecoli", annotation="Pathway"){
+    if(is.null(annotation)) stop("Insert a string with the annotation type.\n See listAnnotationTypes for the available types.") else {}
+    #
+    t <- basicTextGatherer()
+    h <- basicHeaderGatherer()
+    curlPerform( url = paste("http://rest.colombos.net/get_entities", organism, annotation, sep="/"),
+                 .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
+                 curl = getCurlHandle(),
+                 writefunction = t$update,
+                 headerfunction = h$update
+    ) 
+    
+    output <- list(data = t$value(),
+                   status = h$value()[['status']],
+                   status.message = h$value()[['statusMessage']])
+    httpstatus <- as.numeric(output$status)
+    if (httpstatus != 200) {
+        return(output$status.message)
+    }  else {
+        tmp <- fromJSON(output$data, nullValue = NA)$data;
+            response = suppressWarnings( unlist(tmp) )
+
+        return(response)
+    }
 }
