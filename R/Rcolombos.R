@@ -57,7 +57,6 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
       return(response)
   }
 }
-
 #' This method mimics the advanced_search functionality of Colombos.
 #' It takes a string containg the nickname for the selected organism and a vector of string, 
 #' representing the genes of interest for the specified organism, 
@@ -66,11 +65,14 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#' @param ids A vector of strings representing the genes of interest.
+#' @param g_ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
 #' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
-#' @param
-#' @param
-#' @param by A string, either "genes", "contrasts" or "both" (default is genes)
+#' @param c_ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
+#' @param by A string eithes genes, contrasts, both allowing the selection by genes entities, contrast entities or both
+#' @param g_search_type A string either genes, go or annotation
+#' @param ann_type A string containing the selected gene_annotation_type: use \code{\link{listEntities}} to display the available entities
+#' @param c_search_type A string either contrast_names. experiment, go, condition use \code{\link{listOrganisms}} to display
+#' the available organisms.
 #' 
 #' @return A data.frame containing locustag (gene_names), 
 #' contrasts and M-values for the current organism and genes.
@@ -118,8 +120,8 @@ advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, b
 #' the available organisms.
 #' @param ids A vector of strings representing gene_id, go terms or annotation entities according the search type.
 #' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
-#' @param search_type A string either genes, go or annotation
-#' @param entity 
+#' @param g_search_type A string either genes, go or annotation
+#' @param ann_type 
 #' 
 #' @return A data.frame containing locustag (gene_names), 
 #' contrasts and M-values for the current organism and genes.
@@ -176,8 +178,7 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
 #' the available organisms.
 #' @param ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
 #' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
-#' @param search_type A string either genes, go or annotation
-#' @param entity 
+#' @param c_search_type A string either contrast_names. experiment, go, condition
 #' 
 #' @return A data.frame containing locustag (gene_names), 
 #' contrasts and M-values for the current organism and genes.
@@ -240,8 +241,29 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
         return(response)
     }
 }
-#' 
+#' Accessory function (not exposed) allowing the advanced_search by both g_ids and c_ids
 #'
+#' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
+#' @param g_ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
+#' @param geneNames boolean if == FALSE (default) return the locustag otherwise the gene_name for the selected genes.
+#' @param c_ids A vector of strings representing contrast_id, go terms, experiment id or condition id according the search type.
+#' @param search_type A string either genes, go or annotation
+#' @param entity 
+#' 
+#' @return A data.frame containing locustag (gene_names), 
+#' contrasts and M-values for the current organism and genes.
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#' 
+#' @examples
+#' \dontrun{
+#' c.cn <- advanced_search_by_contrasts(organism="bsubt", 
+#' ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
+#' }
+#' 
 advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_type, ann_type, c_search_type){
     if(is.null(g_ids)) stop("Insert a character vector with the g_ids to be imputed.") else {}
     if(is.null(c_ids)) stop("Insert a character vector with the c_ids to be imputed.") else {}

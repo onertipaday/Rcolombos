@@ -277,10 +277,8 @@ listAnnotationTypes <- function(organism="ecoli"){
     }
 }
 
-#' This method takes a string containing the nickname for the selected organism and a vector of string, 
-#' representing the genes of interest for the specified organism, 
-#' and returns a list containing the locustags, gene_names, 
-#' contrasts and M-values for the current selection.
+#' This method takes a string containing the nickname for the selected organism and a string containing the annotation type
+#' and return the available entities
 #'
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.

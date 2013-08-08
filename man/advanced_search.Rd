@@ -1,0 +1,85 @@
+\name{advanced_search}
+\alias{advanced_search}
+\title{This method mimics the advanced_search functionality of Colombos.
+It takes a string containg the nickname for the selected organism and a vector of string,
+representing the genes of interest for the specified organism,
+and returns a list containing the locustags, gene_names,
+contrasts and M-values for the current selection.}
+\usage{
+  advanced_search(organism = NULL, g_ids = NULL,
+    geneNames = FALSE, c_ids, by = "genes", g_search_type,
+    ann_type, c_search_type)
+}
+\arguments{
+  \item{organism}{A character containing the organism id:
+  use \code{\link{listOrganisms}} to display the available
+  organisms.}
+
+  \item{g_ids}{A vector of strings representing
+  contrast_id, go terms, experiment id or condition id
+  according the search type.}
+
+  \item{geneNames}{boolean if == FALSE (default) return the
+  locustag otherwise the gene_name for the selected genes.}
+
+  \item{c_ids}{A vector of strings representing
+  contrast_id, go terms, experiment id or condition id
+  according the search type.}
+
+  \item{by}{A string eithes genes, contrasts, both allowing
+  the selection by genes entities, contrast entities or
+  both}
+
+  \item{g_search_type}{A string either genes, go or
+  annotation}
+
+  \item{ann_type}{A string containing the selected
+  gene_annotation_type: use \code{\link{listEntities}} to
+  display the available entities}
+
+  \item{c_search_type}{A string either contrast_names.
+  experiment, go, condition use \code{\link{listOrganisms}}
+  to display the available organisms.}
+}
+\value{
+  A data.frame containing locustag (gene_names), contrasts
+  and M-values for the current organism and genes.
+}
+\description{
+  This method mimics the advanced_search functionality of
+  Colombos. It takes a string containg the nickname for the
+  selected organism and a vector of string, representing
+  the genes of interest for the specified organism, and
+  returns a list containing the locustags, gene_names,
+  contrasts and M-values for the current selection.
+}
+\examples{
+\dontrun{
+ library("Rcolombos")
+ g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", g_search_type="genes")
+ g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", g_search_type="go")
+ g.anno <- advanced_search(organism="bsubt", g_ids="biotin-carboxyl carrier protein assembly",
+ by="genes", g_search_type="annotation", ann_type="Pathway")
+
+ c.cn <- advanced_search(organism="bsubt", c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"),
+ by="contrasts", c_search_type="contrast_names")
+ c.go <- advanced_search(organism="bsubt", c_ids="response to antibiotic, transcription", by="contrasts", c_search_type="go")
+ c.exp <- advanced_search(organism="bsubt", c_ids="GSE22296", by="contrasts", c_search_type="experiment")
+
+ c.cond <- advanced_search(organism="bsubt",
+ c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
+ by="contrasts", c_search_type="condition")
+
+ b.gn.cn <- advanced_search(organism="bsubt", gene_ids=c("cgeB","yfnG"),
+ geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"),
+ g_search_type="genes", c_search_type="contrast_names", by="both")
+ b.gn.cn2 <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
+ geneNames=FALSE, c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2","GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1","GSM27279.ch1-vs-GSM27279.ch2"),
+ g_search_type="genes", c_search_type="contrast_names", by="both")
+ heatmap(as.matrix(b.gn.cn), col=terrain.colors(15))
+}
+}
+\references{
+  http://colombos.net
+}
+

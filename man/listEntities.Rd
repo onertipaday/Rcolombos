@@ -1,9 +1,7 @@
 \name{listEntities}
 \alias{listEntities}
-\title{This method takes a string containing the nickname for the selected organism and a vector of string,
-representing the genes of interest for the specified organism,
-and returns a list containing the locustags, gene_names,
-contrasts and M-values for the current selection.}
+\title{This method takes a string containing the nickname for the selected organism and a string containing the annotation type
+and return the available entities}
 \usage{
   listEntities(organism = "ecoli", annotation = "Pathway")
 }
@@ -22,16 +20,14 @@ contrasts and M-values for the current selection.}
 }
 \description{
   This method takes a string containing the nickname for
-  the selected organism and a vector of string,
-  representing the genes of interest for the specified
-  organism, and returns a list containing the locustags,
-  gene_names, contrasts and M-values for the current
-  selection.
+  the selected organism and a string containing the
+  annotation type and return the available entities
 }
 \examples{
 \dontrun{
  library("Rcolombos")
- bsubt_available_pathway_entities <- listEntities(organism="bsubt", annotation="Pathway")
+ pathway_entities <- listEntities(organism="bsubt", annotation="Pathway")
+ Tr_entities <- listEntities("bsubt","Transcriptional regulation")
 }
 }
 \references{

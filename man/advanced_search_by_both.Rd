@@ -1,0 +1,46 @@
+\name{advanced_search_by_both}
+\alias{advanced_search_by_both}
+\title{Accessory function (not exposed) allowing the advanced_search by both g_ids and c_ids}
+\usage{
+  advanced_search_by_both(organism, g_ids, geneNames,
+    c_ids, g_search_type, ann_type, c_search_type)
+}
+\arguments{
+  \item{organism}{A character containing the organism id:
+  use \code{\link{listOrganisms}} to display the available
+  organisms.}
+
+  \item{g_ids}{A vector of strings representing
+  contrast_id, go terms, experiment id or condition id
+  according the search type.}
+
+  \item{geneNames}{boolean if == FALSE (default) return the
+  locustag otherwise the gene_name for the selected genes.}
+
+  \item{c_ids}{A vector of strings representing
+  contrast_id, go terms, experiment id or condition id
+  according the search type.}
+
+  \item{search_type}{A string either genes, go or
+  annotation}
+
+  \item{entity}{}
+}
+\value{
+  A data.frame containing locustag (gene_names), contrasts
+  and M-values for the current organism and genes.
+}
+\description{
+  Accessory function (not exposed) allowing the
+  advanced_search by both g_ids and c_ids
+}
+\examples{
+\dontrun{
+c.cn <- advanced_search_by_contrasts(organism="bsubt",
+ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
+}
+}
+\references{
+  http://colombos.net
+}
+
