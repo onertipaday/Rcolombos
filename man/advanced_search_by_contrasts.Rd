@@ -1,6 +1,6 @@
 \name{advanced_search_by_contrasts}
 \alias{advanced_search_by_contrasts}
-\title{Accessory function (not exposed) allowing the advanced_search by contrast_ids, go, experiment, condition}
+\title{Accessory function allowing the advanced_search by contrast_ids, go, experiment, condition}
 \usage{
   advanced_search_by_contrasts(organism = NULL, ids = NULL,
     geneNames = FALSE, c_search_type = NULL)
@@ -18,16 +18,15 @@
   locustag otherwise the gene_name for the selected genes.}
 
   \item{c_search_type}{A string either contrast_names.
-  experiment, go, condition}
+  experiment, go, condition.}
 }
 \value{
   A data.frame containing locustag (gene_names), contrasts
   and M-values for the current organism and genes.
 }
 \description{
-  Accessory function (not exposed) allowing the
-  advanced_search by contrast_ids, go, experiment,
-  condition
+  Accessory function allowing the advanced_search by
+  contrast_ids, go, experiment, condition
 }
 \examples{
 \dontrun{

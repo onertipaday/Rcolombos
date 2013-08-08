@@ -1,6 +1,6 @@
 \name{advanced_search_by_genes}
 \alias{advanced_search_by_genes}
-\title{Accessory function (not exposed) allowing the advanced_search by gene_ids, go, annotation}
+\title{Accessory function allowing the advanced_search by gene_ids, go, annotation}
 \usage{
   advanced_search_by_genes(organism = "bsubt", ids = NULL,
     geneNames = FALSE, g_search_type = "genes", ann_type)
@@ -17,17 +17,19 @@
   locustag otherwise the gene_name for the selected genes.}
 
   \item{g_search_type}{A string either genes, go or
-  annotation}
+  annotation.}
 
-  \item{ann_type}{}
+  \item{ann_type}{A string containing the selected
+  gene_annotation_type: use \code{\link{listEntities}} to
+  display the available entities.}
 }
 \value{
   A data.frame containing locustag (gene_names), contrasts
   and M-values for the current organism and genes.
 }
 \description{
-  Accessory function (not exposed) allowing the
-  advanced_search by gene_ids, go, annotation
+  Accessory function allowing the advanced_search by
+  gene_ids, go, annotation
 }
 \references{
   http://colombos.net

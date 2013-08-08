@@ -4,14 +4,8 @@
 and returns a character vector corresponding to the currently available organisms.}
 \usage{
   listGenes(organism = "ecoli")
-
-  listGenes(organism = "ecoli")
 }
 \arguments{
-  \item{organism}{A character containing the organism id:
-  use \code{\link{listOrganisms}} to display the available
-  organisms.}
-
   \item{organism}{A character containing the organism id:
   use \code{\link{listOrganisms}} to display the available
   organisms.}
@@ -19,15 +13,8 @@ and returns a character vector corresponding to the currently available organism
 \value{
   A data.frame containing the locustag and description of
   all the genes for the selected organism.
-
-  A data.frame containing the locustag and description of
-  all the genes for the selected organism.
 }
 \description{
-  This method takes as parameter a single string,
-  representing an organism, and returns a character vector
-  corresponding to the currently available organisms.
-
   This method takes as parameter a single string,
   representing an organism, and returns a character vector
   corresponding to the currently available organisms.
@@ -37,14 +24,8 @@ and returns a character vector corresponding to the currently available organism
 library('Rcolombos')
 listGenes()
 }
-\dontrun{
-library('Rcolombos')
-listGenes()
-}
 }
 \references{
-  http://colombos.net
-
   http://colombos.net
 }
 

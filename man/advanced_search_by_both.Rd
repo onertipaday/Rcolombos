@@ -1,6 +1,6 @@
 \name{advanced_search_by_both}
 \alias{advanced_search_by_both}
-\title{Accessory function (not exposed) allowing the advanced_search by both g_ids and c_ids}
+\title{Accessory function allowing the advanced_search by both g_ids and c_ids}
 \usage{
   advanced_search_by_both(organism, g_ids, geneNames,
     c_ids, g_search_type, ann_type, c_search_type)
@@ -21,18 +21,23 @@
   contrast_id, go terms, experiment id or condition id
   according the search type.}
 
-  \item{search_type}{A string either genes, go or
-  annotation}
+  \item{g_search_type}{A string either genes, go or
+  annotation.}
 
-  \item{entity}{}
+  \item{ann_type}{A string containing the selected
+  gene_annotation_type: use \code{\link{listEntities}} to
+  display the available entities.}
+
+  \item{c_search_type}{A string either contrast_names.
+  experiment, go, condition.}
 }
 \value{
   A data.frame containing locustag (gene_names), contrasts
   and M-values for the current organism and genes.
 }
 \description{
-  Accessory function (not exposed) allowing the
-  advanced_search by both g_ids and c_ids
+  Accessory function allowing the advanced_search by both
+  g_ids and c_ids
 }
 \examples{
 \dontrun{
