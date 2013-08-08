@@ -82,25 +82,34 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
-#'  g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", search_type="genes")
-#'  g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", search_type="go")
+#'  g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", g_search_type="genes")
+#'  g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", g_search_type="go")
 #'  g.anno <- advanced_search(organism="bsubt", g_ids="biotin-carboxyl carrier protein assembly", 
-#'  by="genes", search_type="annotation", ann_type="Pathway")
+#'  by="genes", g_search_type="annotation", ann_type="Pathway")
 #'  
-#'  http://rest.colombos.net/advanced_search_by_contrast/bsubt/contrast_names/GSM27217.ch2-vs-GSM27217.ch1,GSM27218.ch1-vs-GSM27218.ch2
 #'  c.cn <- advanced_search(organism="bsubt", c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
-#'  by="contrasts", search_type="contrast_names")
+#'  by="contrasts", c_search_type="contrast_names")
+#'  c.go <- advanced_search(organism="bsubt", c_ids="response to antibiotic, transcription", by="contrasts", c_search_type="go")
+#'  c.exp <- advanced_search(organism="bsubt", c_ids="GSE22296", by="contrasts", c_search_type="experiment")
+#'  
+#'  c.cond <- advanced_search(organism="bsubt", 
+#'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
+#'  by="contrasts", c_search_type="condition")
 #'  
 #'  b.gn.cn <- advanced_search(organism="bsubt", gene_ids=c("cgeB","yfnG"), 
-#'  geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), by="both")
-#'  heatmap(as.matrix(my_module), col=terrain.colors(15))
+#'  geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
+#'  g_search_type="genes", c_search_type="contrast_names", by="both")
+#'  b.gn.cn2 <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
+#'  geneNames=FALSE, c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2","GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1","GSM27279.ch1-vs-GSM27279.ch2"), 
+#'  g_search_type="genes", c_search_type="contrast_names", by="both")
+#'  heatmap(as.matrix(b.gn.cn), col=terrain.colors(15))
 #' }
 #'
-advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, by="genes", search_type="genes", ann_type){
+advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, by="genes", g_search_type, ann_type, c_search_type){
     if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
-    if(by=="genes") out <- advanced_search_by_genes(organism, g_ids, geneNames, search_type, ann_type)
-    else if(by=="contrasts") out <- advanced_search_by_contrasts(organism, c_ids, geneNames, search_type="contrast_names", ann_type)
-    else if(by=="both") out <- advanced_search_by_both(organism, g_ids, geneNames, c_ids, search_type, ann_type, cond_type)
+    if(by=="genes") out <- advanced_search_by_genes(organism, g_ids, geneNames, g_search_type, ann_type)
+    else if(by=="contrasts") out <- advanced_search_by_contrasts(organism, c_ids, geneNames, c_search_type)
+    else if(by=="both") out <- advanced_search_by_both(organism, g_ids, geneNames, c_ids, g_search_type, ann_type, c_search_type)
     else stop("Wrong by: it should be either genes, contrasts or both!")
 }
 #' Accessory function (not exposed) allowing the advanced_search by gene_ids, go, annotation
@@ -119,17 +128,17 @@ advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, b
 #'
 #' @export
 #'
-advanced_search_by_genes <- function(organism="bsubt", ids=c("cgeB","yfnG"), geneNames=FALSE, search_type="genes", ann_type){
-    #         if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
+advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE, g_search_type="genes", ann_type){
+    if(is.null(ids)) stop("Insert a character vector with the ids to be imputed.") else {}
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
-    if(search_type=="genes"){
+    if(g_search_type=="genes"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "genes", paste(ids, collapse=","), sep="/")
     }
-    else if(search_type=="go"){
+    else if(g_search_type=="go"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
     }
-    else if(search_type=="annotation"){
+    else if(g_search_type=="annotation"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), 
                             gsub(" ","%20", ids), sep="/")  
     } else {
@@ -183,22 +192,25 @@ advanced_search_by_genes <- function(organism="bsubt", ids=c("cgeB","yfnG"), gen
 #' ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
 #' }
 #' 
-advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, search_type="contrast_names", ann_type){
-    if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
+advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, c_search_type=NULL){
+#     if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
-    if(search_type=="contrast_names"){
+    if(c_search_type=="contrast_names"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "contrast_names", paste(ids, collapse=","), sep="/")
     }
-    else if(search_type=="experiment"){
-#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
+    else if(c_search_type=="experiment"){
+# url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "experiment", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "experiment", gsub(" ","%20", ids), sep="/")
     }
-    else if(search_type=="go"){
-#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
+    else if(c_search_type=="go"){
+# url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "go", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "go", gsub(" ","%20", ids), sep="/")
     }
-    else if(search_type=="condition"){
-#         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), gsub(" ","%20", ids), sep="/")
+    else if(c_search_type=="condition"){
+# url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "condition", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "condition", paste(ids, collapse=","), sep="/")
     } else {
         stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
     }
@@ -228,7 +240,68 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
         return(response)
     }
 }
-
-advanced_search_by_both <- function(organism="bsubt", gene_ids=c("cgeB","yfnG"), geneNames=FALSE, contrast_ids, by="genes"){
-    
+#' 
+#'
+advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_type, ann_type, c_search_type){
+    if(is.null(g_ids)) stop("Insert a character vector with the g_ids to be imputed.") else {}
+    if(is.null(c_ids)) stop("Insert a character vector with the c_ids to be imputed.") else {}
+    t <- basicTextGatherer()
+    h <- basicHeaderGatherer()
+# http://rest.colombos.net/advanced_search_by_genes/bsubt/genes/cgeB,yfnG/contrast_names/GSM27217.ch2-vs-GSM27217.ch1,GSM27218.ch1-vs-GSM27218.ch2
+    base_url <- "http://rest.colombos.net/advanced_search_by_both"
+    if(g_search_type=="genes"){
+        g_string <- paste(base_url, organism, "genes", paste(g_ids, collapse=","), sep="/")
+    }
+    else if(g_search_type=="go"){
+        g_string <- paste(base_url, organism, "go", gsub(" ","%20", g_ids), sep="/")
+    }
+    else if(g_search_type=="annotation"){
+        g_string <- paste(base_url, organism, "annotation", gsub(" ","%20", ann_type), 
+                            gsub(" ","%20", g_ids), sep="/")  
+    } else {
+        stop("Wrong search_type: it should be either genes, go or annotation!")
+    }
+#
+    if(c_search_type=="contrast_names"){
+        url_string <- paste(g_string, "contrast_names", paste(c_ids, collapse=","), sep="/")
+    }
+    else if(c_search_type=="experiment"){
+        # url_string <- paste(g_string, "experiment", paste(gsub(" ","%20", c_ids), collapse=","), sep="/")
+        url_string <- paste(g_string, "experiment", gsub(" ","%20", c_ids), sep="/")
+    }
+    else if(c_search_type=="go"){
+        # url_string <- paste(g_string, "go", paste(gsub(" ","%20", c_ids), collapse=","), sep="/")
+        url_string <- paste(g_string, "go", gsub(" ","%20", c_ids), sep="/")
+    }
+    else if(c_search_type=="condition"){
+        # url_string <- paste(g_string, "condition", paste(gsub(" ","%20", c_ids), collapse=","), sep="/")
+        url_string <- paste(g_string, "condition", paste(c_ids, collapse=","), sep="/")
+    } else {
+        stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
+    }
+    curlPerform( url = url_string,
+                 .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
+                 curl = getCurlHandle(),
+                 writefunction = t$update,
+                 headerfunction = h$update
+    ) 
+    output <- list(data = t$value(),
+                   status = h$value()[['status']],
+                   status.message = h$value()[['statusMessage']])
+    httpstatus <- as.numeric(output$status)
+    if (httpstatus != 200) {
+        return(output$status.message)
+    }  else {
+        tmp <- fromJSON(output$data, nullValue = NA)$data;
+        if (geneNames){
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
+                                                           nrow=length(tmp$geneNames), ncol=length(tmp$contrasts), byrow=T)))
+            colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneNames
+        } else {
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
+                                                           nrow=length(tmp$geneLocustags), ncol=length(tmp$contrasts), byrow=T)) )
+            colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneLocustags
+        }
+        return(response)
+    }
 }
