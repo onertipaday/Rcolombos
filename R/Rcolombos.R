@@ -98,10 +98,7 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
 #'  by="contrasts", c_search_type="condition")
 #'  
-#'  b.gn.cn <- advanced_search(organism="bsubt", gene_ids=c("cgeB","yfnG"), 
-#'  geneNames=FALSE, contrast_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
-#'  g_search_type="genes", c_search_type="contrast_names", by="both")
-#'  b.gn.cn2 <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
+#'  b.gn.cn <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
 #'  geneNames=FALSE, c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2","GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1","GSM27279.ch1-vs-GSM27279.ch2"), 
 #'  g_search_type="genes", c_search_type="contrast_names", by="both")
 #'  heatmap(as.matrix(b.gn.cn), col=terrain.colors(15))
@@ -131,7 +128,7 @@ advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, b
 #' @export
 #'
 advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE, g_search_type="genes", ann_type){
-    if(is.null(ids)) stop("Insert a character vector with the ids to be imputed.") else {}
+    if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
     if(g_search_type=="genes"){
@@ -194,7 +191,6 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
 #' }
 #' 
 advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, c_search_type=NULL){
-#     if(is.null(organism)) stop("Insert a character vector corresponding to the nickname of the selected organism.") else {}
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     t <- basicTextGatherer()
     h <- basicHeaderGatherer()
