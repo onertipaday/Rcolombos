@@ -81,11 +81,14 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
+#'  
+#'  # modules by gene entities
 #'  g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", g_search_type="genes")
 #'  g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", g_search_type="go")
 #'  g.anno <- advanced_search(organism="bsubt", g_ids="biotin-carboxyl carrier protein assembly", 
 #'  by="genes", g_search_type="annotation", ann_type="Pathway")
 #'  
+#'  # modules by contrast entities
 #'  c.cn <- advanced_search(organism="bsubt", c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
 #'  by="contrasts", c_search_type="contrast_names")
 #'  c.go <- advanced_search(organism="bsubt", c_ids="response to antibiotic, transcription", by="contrasts", c_search_type="go")
@@ -94,6 +97,7 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
 #'  by="contrasts", c_search_type="condition")
 #'  
+#'  # modules by both gene and contrast entities
 #'  b.go.cn <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", geneNames=F, 
 #'  c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), g_search_type="go", c_search_type="contrast_names", by="both")
 #'  b.gn.ge <- advanced_search(organism="bsubt", g_ids=c("BSU00020","BSU00100"), geneNames=F, c_ids="GSE22296", 
