@@ -93,11 +93,15 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'  by="contrasts", c_search_type="contrast_names")
 #'  c.go <- advanced_search(organism="bsubt", c_ids="response to antibiotic, transcription", by="contrasts", c_search_type="go")
 #'  c.exp <- advanced_search(organism="bsubt", c_ids="GSE22296", by="contrasts", c_search_type="experiment")
-#'  
 #'  c.cond <- advanced_search(organism="bsubt", 
 #'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
 #'  by="contrasts", c_search_type="condition")
 #'  
+#'  b.go.cn <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", geneNames=F, 
+#'  c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), g_search_type="go", c_search_type="contrast_names", by="both")
+#'  http://rest.colombos.net/advanced_search_by_both/bsubt/genes/cgeB,yfnG/experiment/GSE22296
+#'  b.gn.ge <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), geneNames=F, c_ids="GSE22296", 
+#'  g_search_type="genes", c_search_type="contrast_names", by="both")
 #'  b.gn.cn <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
 #'  geneNames=FALSE, c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2","GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1","GSM27279.ch1-vs-GSM27279.ch2"), 
 #'  g_search_type="genes", c_search_type="contrast_names", by="both")
