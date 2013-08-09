@@ -19,7 +19,9 @@
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
-#'  my_module <- quick_search(organism="ecoli", genes=c("b0400","b2805","b0567"), geneNames=FALSE)
+#'  my_module <- quick_search(organism="ecoli", 
+#'                      genes=c("b0400","b2805","b0567"), 
+#'                      geneNames=FALSE)
 #'  heatmap(as.matrix(my_module), col=terrain.colors(15))
 #' }
 #'
@@ -83,30 +85,46 @@ quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
 #'  library("Rcolombos")
 #'  
 #'  # modules by gene entities
-#'  g.gn <- advanced_search(organism="bsubt", g_ids=c("cgeB","yfnG"), by="genes", g_search_type="genes")
-#'  g.go <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", by="genes", g_search_type="go")
-#'  g.anno <- advanced_search(organism="bsubt", g_ids="biotin-carboxyl carrier protein assembly", 
-#'  by="genes", g_search_type="annotation", ann_type="Pathway")
+#'  g.gn <- advanced_search(organism="bsubt", 
+#'                      g_ids=c("cgeB","yfnG"), 
+#'                      by="genes", g_search_type="genes")
+#'  g.go <- advanced_search(organism="bsubt", 
+#'                      g_ids="response to antibiotic, transcription", 
+#'                      by="genes", g_search_type="go")
+#'  g.anno <- advanced_search(organism="bsubt", 
+#'                      g_ids="biotin-carboxyl carrier protein assembly", 
+#'                      by="genes", g_search_type="annotation", ann_type="Pathway")
 #'  
 #'  # modules by contrast entities
-#'  c.cn <- advanced_search(organism="bsubt", c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), 
-#'  by="contrasts", c_search_type="contrast_names")
-#'  c.go <- advanced_search(organism="bsubt", c_ids="response to antibiotic, transcription", by="contrasts", c_search_type="go")
-#'  c.exp <- advanced_search(organism="bsubt", c_ids="GSE22296", by="contrasts", c_search_type="experiment")
+#'  c.cn <- advanced_search(organism="bsubt", 
+#'                      c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"),
+#'                      by="contrasts", c_search_type="contrast_names")
+#'  c.go <- advanced_search(organism="bsubt", 
+#'                      c_ids="response to antibiotic, transcription", 
+#'                      by="contrasts", c_search_type="go")
+#'  c.exp <- advanced_search(organism="bsubt", 
+#'                      c_ids="GSE22296", by="contrasts", c_search_type="experiment")
 #'  c.cond <- advanced_search(organism="bsubt", 
-#'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN","t_butOH","t_butOOH","XYLOSE","LYSOZYME"),
+#'  c_ids=c("DAPTOMYCIN","H2O2","HPUra","IPTG","MMC","MNCL2","MOENOMYCIN","RAMOPLANIN"),
 #'  by="contrasts", c_search_type="condition")
 #'  
 #'  # modules by both gene and contrast entities
-#'  b.go.cn <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", geneNames=F, 
-#'  c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), g_search_type="go", c_search_type="contrast_names", by="both")
-#'  b.gn.ge <- advanced_search(organism="bsubt", g_ids=c("BSU00020","BSU00100"), geneNames=F, c_ids="GSE22296", 
-#'  g_search_type="genes", c_search_type="experiment", by="both")
-#'  b.go.ge <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription", geneNames=F, c_ids="GSE22296", 
-#'  g_search_type="go", c_search_type="experiment", by="both")
-#'  b.gn.cn <- advanced_search(organism="bsubt", g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"),
-#'  geneNames=FALSE, c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2","GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1","GSM27279.ch1-vs-GSM27279.ch2"), 
-#'  g_search_type="genes", c_search_type="contrast_names", by="both")
+#'  b.go.cn <- advanced_search(organism="bsubt", 
+#'                      g_ids="response to antibiotic, transcription", geneNames=F, 
+#'                      c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"),
+#'                      g_search_type="go", c_search_type="contrast_names", by="both")
+#'  b.gn.ge <- advanced_search(organism="bsubt", g_ids=c("BSU00020","BSU00100"), 
+#'                      geneNames=F, c_ids="GSE22296", g_search_type="genes", 
+#'                      c_search_type="experiment", by="both")
+#'  b.go.ge <- advanced_search(organism="bsubt", g_ids="response to antibiotic, transcription",
+#'                      geneNames=F, c_ids="GSE22296", g_search_type="go", 
+#'                      c_search_type="experiment", by="both")
+#'  b.gn.cn <- advanced_search(organism="bsubt", 
+#'                      g_ids=c("dnaA","dnaN","yaaA","recF","yaaB","gyrB"), geneNames=FALSE, 
+#'                      c_ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2",
+#'                      "GSM27219.ch2-vs-GSM27219.ch1","GSM27278.ch2-vs-GSM27278.ch1",
+#'                      "GSM27279.ch1-vs-GSM27279.ch2"), 
+#'                      g_search_type="genes", c_search_type="contrast_names", by="both")
 #'  heatmap(as.matrix(b.gn.cn), col=terrain.colors(15))
 #' }
 #'
