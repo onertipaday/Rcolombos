@@ -35,7 +35,9 @@ the locustags (gene_names), contrasts and M-values for the current selection.}
 \examples{
 \dontrun{
  library("Rcolombos")
- my_module <- quick_search(organism="ecoli", genes=c("b0400","b2805","b0567"), geneNames=FALSE)
+ my_module <- quick_search(organism="ecoli",
+                     genes=c("b0400","b2805","b0567"),
+                     geneNames=FALSE)
  heatmap(as.matrix(my_module), col=terrain.colors(15))
 }
 }
