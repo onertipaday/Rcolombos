@@ -23,7 +23,7 @@
 \examples{
 \dontrun{
 library('Rcolombos')
-getCompendium()
+mtube <- getCompendium("mtube")
 }
 }
 \references{
