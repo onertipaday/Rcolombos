@@ -175,9 +175,8 @@ getCompendium <- function(organism="ecoli", path=NULL){
         tmp <- fromJSON(output$data, nullValue = NA)$data;
         download.file( tmp, destfile )
       } else {}
-    ## read the zipped file
     temp <- unz(destfile, paste(organism, "_compendium_data.txt",sep=""))
-    my_cols <- scan(temp, what="c", nlines=1)
+    my_cols <- na.omit(scan(temp, nlines=1, sep="\t", what="c", na.strings="", quiet=TRUE))
     out <- read.csv(temp, row.names=1, skip=7, stringsAsFactors=FALSE, sep="\t")
     out <- out[,c(2:dim(out)[[2]])] 
     colnames(out) = my_cols; out <- out[,c(2:dim(out)[[2]])]
