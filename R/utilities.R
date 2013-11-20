@@ -193,7 +193,7 @@ getCompendium <- function(organism="ecoli", path=NULL){
     temp <- files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)]
     condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
     ## return a list with three data.frame
-    return( list(exprdata=exprdata, condannot=condannot, condotol=condontol) )
+    return( list(exprdata=exprdata, condannot=condannot, condontol=condontol) )
   }    
 }
 
