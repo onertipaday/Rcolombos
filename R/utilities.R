@@ -140,7 +140,10 @@ listContrasts <- function(organism="ecoli"){
 #' if already retrieved
 #' 
 #'
-#' @return A data.frame containing the full compendium for the selected organism.
+#' @return A list containing three data.frame: 
+#' \item{exprdata}{the full compendium for the selected organism}
+#' \item{condannot}{The condition annotation for the selected organism}
+#' \item{condontol}{the condition ontology for the selected organism}
 #'
 #' @references http://colombos.net
 #'
@@ -154,7 +157,7 @@ listContrasts <- function(organism="ecoli"){
 #'
 getCompendium <- function(organism="ecoli", path=NULL){
   if(is.null(path)) path <- getwd() else {}
-    destfile <- paste(path,"/",organism, "_compendium_data.txt.zip",sep="")
+    destfile <- paste(path,"/",organism, "_compendium_data.zip",sep="")
     header.field = c('Content-Type' = "application/json")
     curl <- getCurlHandle() 
     curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
@@ -175,11 +178,22 @@ getCompendium <- function(organism="ecoli", path=NULL){
         tmp <- fromJSON(output$data, nullValue = NA)$data;
         download.file( tmp, destfile )
       } else {}
-    temp <- unz(destfile, paste(organism, "_compendium_data.txt",sep=""))
+    ## exprdata
+    unzip(destfile) # unzip the files in the current directory
+    files <- dir(pattern="colombos_[a-z]+_[a-z]+_[0-9]+.txt") # reg exp for matching only the downloaded files
+    temp <- files[grep("colombos_[a-z]+_exprdata_[0-9]+.txt", files)]
     my_cols <- na.omit(scan(temp, nlines=1, sep="\t", what="c", na.strings="", quiet=TRUE))
-    out <- read.csv(temp, row.names=1, skip=7, stringsAsFactors=FALSE, sep="\t")
-    out <- out[,c(2:dim(out)[[2]])] 
-    colnames(out) = my_cols; out <- out[,c(2:dim(out)[[2]])]
+    exprdata <- read.csv(temp, row.names=1, skip=7, stringsAsFactors=FALSE, sep="\t", header=FALSE)
+    exprdata <- exprdata[,c(2:dim(exprdata)[[2]])] 
+    colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
+    ## condition annotations 
+    temp <- files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)]
+    condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
+    ## condition ontology
+    temp <- files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)]
+    condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
+    ## return a list with three data.frame
+    return( list(exprdata=exprdata, condannot=condannot, condotol=condontol) )
   }    
 }
 
