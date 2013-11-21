@@ -2,7 +2,7 @@
 \alias{getCompendium}
 \title{This method allows to download/import the full compendium for the selected organism}
 \usage{
-  getCompendium(organism = "ecoli", path = NULL)
+  getCompendium(organism = "hpylo", path = NULL)
 }
 \arguments{
   \item{organism}{A character containing the organism id:

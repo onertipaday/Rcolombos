@@ -1,7 +1,4 @@
 export(advanced_search)
-export(advanced_search_by_both)
-export(advanced_search_by_contrasts)
-export(advanced_search_by_genes)
 export(getCompendium)
 export(listAnnotationTypes)
 export(listContrasts)
