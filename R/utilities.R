@@ -155,47 +155,78 @@ listContrasts <- function(organism="ecoli"){
 #' mtube <- getCompendium("mtube")
 #' }
 #'
-getCompendium <- function(organism="ecoli", path=NULL){
-  if(is.null(path)) path <- getwd() else {}
+getCompendium <- function(organism="hpylo", path=NULL){
+    if(is.null(path)) path <- getwd() else {}
     destfile <- paste(path,"/",organism, "_compendium_data.zip",sep="")
-    header.field = c('Content-Type' = "application/json")
-    curl <- getCurlHandle() 
-    curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
-    t <- basicTextGatherer()
-    h <- basicHeaderGatherer()
-    body = curlPerform(url=paste("http://rest.colombos.net/get_organism_data/", organism, "/",sep=""),
-                     curl = curl,
-                     writefunction = t$update,
-                     headerfunction = h$update)
-    output <- list(data = t$value(),
-                 status = h$value()[['status']],
-                 status.message = h$value()[['statusMessage']])
-    httpstatus <- as.numeric(output$status)
-    if (httpstatus != 200) {
-      return(output$status.message)
+    if(!file.exists(destfile)){
+        header.field = c('Content-Type' = "application/json")
+        curl <- getCurlHandle() 
+        curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
+        t <- basicTextGatherer()
+        h <- basicHeaderGatherer()
+        body = curlPerform(url=paste("http://rest.colombos.net/get_organism_data/", organism, "/",sep=""),
+                         curl = curl,
+                         writefunction = t$update,
+                         headerfunction = h$update)
+        output <- list(data = t$value(),
+                     status = h$value()[['status']],
+                     status.message = h$value()[['statusMessage']])
+        httpstatus <- as.numeric(output$status)
+        if (httpstatus != 200) {
+        } else {
+            tmp <- fromJSON(output$data, nullValue = NA)$data;
+            download.file( tmp, destfile )
+            return(parseCompendium(destfile))
+        }
     } else {
-      if(!file.exists(destfile)){
-        tmp <- fromJSON(output$data, nullValue = NA)$data;
-        download.file( tmp, destfile )
-      } else {}
-    ## exprdata
-    unzip(destfile) # unzip the files in the current directory
-    files <- dir(pattern="colombos_[a-z]+_[a-z]+_[0-9]+.txt") # reg exp for matching only the downloaded files
-    temp <- files[grep("colombos_[a-z]+_exprdata_[0-9]+.txt", files)]
+        return(parseCompendium(destfile))
+    }
+}
+#' This method allows importing the full compendium for the selected organism from a local file
+#'
+#' @param organism A character containing the full path of the downloaded file
+#'
+#' @return A list containing three data.frame: 
+#' \item{exprdata}{the full compendium for the selected organism}
+#' \item{condannot}{The condition annotation for the selected organism}
+#' \item{condontol}{the condition ontology for the selected organism}
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library('Rcolombos')
+#' mtube <- parseCompendium("mtube_compendium_data.zip")
+#' }
+#'
+parseCompendium <- function(destfile){
+    out_dir <- strsplit(destfile, "\\.")[[1]][1]
+    cat(out_dir,"\n")
+    unzip(destfile, exdir=out_dir) # unzip the files in the proper directory (creating it in case)
+    files <- dir(path=out_dir,pattern="colombos_[a-z]+_[a-z]+_[0-9]+.txt") # reg exp for matching only the downloaded files
+    temp <- paste(out_dir, files[grep("colombos_[a-z]+_exprdata_[0-9]+.txt", files)], sep="/")
+    cat(temp,"\n")
     my_cols <- na.omit(scan(temp, nlines=1, sep="\t", what="c", na.strings="", quiet=TRUE))
+            cat("parse 4\n")
     exprdata <- read.csv(temp, row.names=1, skip=7, stringsAsFactors=FALSE, sep="\t", header=FALSE)
+            cat("parse 5\n")
     exprdata <- exprdata[,c(2:dim(exprdata)[[2]])] 
     colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
+                cat("parse 6\n")
     ## condition annotations 
-    temp <- files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)]
+    temp <- paste(out_dir, files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)], sep="/")
     condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
+                cat("parse 7\n")
     ## condition ontology
-    temp <- files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)]
+    temp <- paste(out_dir, files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)], sep="/")
     condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
     ## return a list with three data.frame
     return( list(exprdata=exprdata, condannot=condannot, condontol=condontol) )
-  }    
 }
+
+
 
 #' This method takes as parameter a string (the nickname of an organism) and returns a character vector 
 #' corresponding to the currently available annotation type for the selected organism.
