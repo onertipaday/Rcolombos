@@ -203,22 +203,16 @@ getCompendium <- function(organism="hpylo", path=NULL){
 #'
 parseCompendium <- function(destfile){
     out_dir <- strsplit(destfile, "\\.")[[1]][1]
-    cat(out_dir,"\n")
-    unzip(destfile, exdir=out_dir) # unzip the files in the proper directory (creating it in case)
+    unzip(destfile, exdir=out_dir) # unzip the files in the proper directory 
     files <- dir(path=out_dir,pattern="colombos_[a-z]+_[a-z]+_[0-9]+.txt") # reg exp for matching only the downloaded files
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_exprdata_[0-9]+.txt", files)], sep="/")
-    cat(temp,"\n")
     my_cols <- na.omit(scan(temp, nlines=1, sep="\t", what="c", na.strings="", quiet=TRUE))
-            cat("parse 4\n")
     exprdata <- read.csv(temp, row.names=1, skip=7, stringsAsFactors=FALSE, sep="\t", header=FALSE)
-            cat("parse 5\n")
     exprdata <- exprdata[,c(2:dim(exprdata)[[2]])] 
     colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
-                cat("parse 6\n")
     ## condition annotations 
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)], sep="/")
     condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
-                cat("parse 7\n")
     ## condition ontology
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)], sep="/")
     condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
