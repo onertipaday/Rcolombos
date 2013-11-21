@@ -5,7 +5,7 @@
   parseCompendium(destfile)
 }
 \arguments{
-  \item{organism}{A character containing the full path of
+  \item{destfile}{A character containing the full path of
   the downloaded file}
 }
 \value{

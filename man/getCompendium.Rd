@@ -26,7 +26,7 @@
 \examples{
 \dontrun{
 library('Rcolombos')
-mtube <- getCompendium("mtube")
+hpylo <- getCompendium("hpylo")
 }
 }
 \references{

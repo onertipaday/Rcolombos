@@ -152,7 +152,7 @@ listContrasts <- function(organism="ecoli"){
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
-#' mtube <- getCompendium("mtube")
+#' hpylo <- getCompendium("hpylo")
 #' }
 #'
 getCompendium <- function(organism="hpylo", path=NULL){
@@ -184,7 +184,7 @@ getCompendium <- function(organism="hpylo", path=NULL){
 }
 #' This method allows importing the full compendium for the selected organism from a local file
 #'
-#' @param organism A character containing the full path of the downloaded file
+#' @param destfile A character containing the full path of the downloaded file
 #'
 #' @return A list containing three data.frame: 
 #' \item{exprdata}{the full compendium for the selected organism}
