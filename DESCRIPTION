@@ -1,7 +1,7 @@
 Package: Rcolombos
 Type: Package
 Title: Interface to Colombos Compendia using the exposed REST API
-Version: 1.4.1
+Version: 1.4.2
 Date: 2013-06-26
 Author: Paolo Sonego <paolo.sonego@fmach.it>
 Maintainer: Paolo Sonego <paolo.sonego@fmach.it>
