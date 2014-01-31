@@ -212,10 +212,10 @@ parseCompendium <- function(destfile){
     colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
     ## condition annotations 
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)], sep="/")
-    condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
+    condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
     ## condition ontology
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)], sep="/")
-    condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T)
+    condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
     ## return a list with three data.frame
     return( list(exprdata=exprdata, condannot=condannot, condontol=condontol) )
 }
