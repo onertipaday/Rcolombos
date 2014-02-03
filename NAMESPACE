@@ -1,3 +1,5 @@
+import(RCurl)
+import(RJSONIO)
 export(advanced_search)
 export(getCompendium)
 export(listAnnotationTypes)
