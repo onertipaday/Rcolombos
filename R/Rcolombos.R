@@ -25,38 +25,26 @@
 #'  heatmap(as.matrix(my_module), col=terrain.colors(15))
 #' }
 #'
+
 quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
-  if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
-  #
-  t <- basicTextGatherer()
-  h <- basicHeaderGatherer()
-  curlPerform( url = paste("http://rest.colombos.net/rest/quick_search/", 
-                           organism, paste(genes, collapse=","), sep="/"),
-               .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
-               curl = getCurlHandle(),
-               writefunction = t$update,
-               headerfunction = h$update
-  ) 
-  
-  output <- list(data = t$value(),
-                 status = h$value()[['status']],
-                 status.message = h$value()[['statusMessage']])
-  httpstatus <- as.numeric(output$status)
-  if (httpstatus != 200) {
-    return(output$status.message)
-  }  else {
-      tmp <- fromJSON(output$data, nullValue = NA)$data;
-      if (geneNames){
-        response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
-                   nrow=length(tmp$geneNames), ncol=length(tmp$contrasts), byrow=T)))
-        colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneNames
-      } else {
-        response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
-                   nrow=length(tmp$geneLocustags), ncol=length(tmp$contrasts), byrow=T)) )
-        colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneLocustags
-      }
-      return(response)
-  }
+    if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
+    r <- GET("http://rest.colombos.net/",path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
+    if (r$headers$status != 200) {
+        stop_for_status(r)
+    }
+    else {
+        tmp <- content(r)
+        if (geneNames){
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
+            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
+        } else {
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
+        }
+        return(response)
+    }
 }
 #' This method mimics the advanced_search functionality of Colombos.
 #' It takes a series of parameters, representing the different settings available on Colombos advanced search
