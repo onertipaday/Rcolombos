@@ -1,3 +1,4 @@
+import(httr)
 import(RCurl)
 import(RJSONIO)
 export(advanced_search)

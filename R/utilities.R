@@ -12,31 +12,22 @@
 #' listOrganisms()
 #' }
 #'
-listOrganisms <- function(){
-  header.field = c('Content-Type' = "application/json")
-  curl <- getCurlHandle() 
-  curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
-  t <- basicTextGatherer()
-  h <- basicHeaderGatherer()
-  body = curlPerform(url = "http://rest.colombos.net/get_organisms",
-                     curl = curl,
-                     writefunction = t$update,
-                     headerfunction = h$update)
-  output <- list(data = t$value(),
-                 status = h$value()[['status']],
-                 status.message = h$value()[['statusMessage']])
-  httpstatus <- as.numeric(output$status)
-  if (httpstatus != 200) {
-    return(output$status.message)
-  } else {
-    tmp <- fromJSON(output$data, nullValue = NA)$data;
-    response <- data.frame(matrix(unlist(tmp, recursive=F), length(tmp), 3, byrow=T))
-    for (i in 1:3) {
-      response[,i] <- sapply(response[,i], as.character)
+listOrganisms <- function () 
+{
+    r <- GET("http://rest.colombos.net/", path = "get_organisms")
+    # Check the request succeeded
+    stop_for_status(r)
+    if (r$headers$status != 200) {
+        return(r$headers$statusmessage)
     }
-    colnames(response) <- c("name", "description", "nickname")
-    return(response)
-  }
+    else {
+        # Automatically parse the json output
+        tmp <- content(r)
+        response <- data.frame(matrix(unlist(tmp$data, recursive=F), length(tmp$data),3, byrow=T))
+        for (i in 1:3) response[,i] <- sapply(response[,i], as.character)
+        colnames(response) <- c("name", "description", "nickname")
+        return(response)
+    }
 }
 
 #' This method takes as parameter a single string, representing an organism,
