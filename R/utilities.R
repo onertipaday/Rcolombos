@@ -81,30 +81,22 @@ listGenes <- function(organism="ecoli") {
 #' }
 #'
 listContrasts <- function(organism="ecoli"){
-  header.field = c('Content-Type' = "application/json")
-  curl <- getCurlHandle() 
-  curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
-  t <- basicTextGatherer()
-  h <- basicHeaderGatherer()
-  body = curlPerform(url=paste("http://rest.colombos.net/get_contrasts/", organism, sep=""),
-                     curl = curl,
-                     writefunction = t$update,
-                     headerfunction = h$update)
-  output <- list(data = t$value(),
-                 status = h$value()[['status']],
-                 status.message = h$value()[['statusMessage']])
-  httpstatus <- as.numeric(output$status)
-  if (httpstatus != 200) {
-    return(output$status.message)
-  } else {
-    tmp <- fromJSON(output$data, nullValue = NA)$data;
-    response <- data.frame(matrix(unlist(tmp, recursive=F), length(tmp), 2, byrow=T))
-    for (i in 1:2) {
-      response[,i] <- sapply(response[,i], as.character) # sanitize the list in the df
+    
+    r <- GET("http://rest.colombos.net/",path = paste("get_contrasts/",organism, sep=""))
+    if (r$headers$status != 200) {
+        stop_for_status(r)    # Check the request succeeded
+        #return(r$headers$statusmessage)
     }
-    colnames(response) <- c("name", "description")
-    return(response)
-  }
+    else {
+        # Automatically parse the json output
+        tmp <- content(r)
+        response <- data.frame(matrix(unlist(tmp$data, recursive=F), length(tmp$data), 2, byrow=T))
+        for (i in 1:2) {
+            response[,i] = as.character(response[,i])
+        }
+        colnames(response) <- c("name", "description")
+        return(response)
+    }
 }
 
 #' This method allows to download/import the full compendium for the selected organism
@@ -135,28 +127,17 @@ getCompendium <- function(organism="hpylo", path=NULL){
     if(is.null(path)) path <- getwd() else {}
     destfile <- paste(path,"/",organism, "_compendium_data.zip",sep="")
     if(!file.exists(destfile)){
-        header.field = c('Content-Type' = "application/json")
-        curl <- getCurlHandle() 
-        curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
-        t <- basicTextGatherer()
-        h <- basicHeaderGatherer()
-        body = curlPerform(url=paste("http://rest.colombos.net/get_organism_data/", organism, "/",sep=""),
-                         curl = curl,
-                         writefunction = t$update,
-                         headerfunction = h$update)
-        output <- list(data = t$value(),
-                     status = h$value()[['status']],
-                     status.message = h$value()[['statusMessage']])
-        httpstatus <- as.numeric(output$status)
-        if (httpstatus != 200) {
-        } else {
-            tmp <- fromJSON(output$data, nullValue = NA)$data;
-            download.file( tmp, destfile )
+        r <- GET("http://rest.colombos.net/",path = paste("get_organism_data/",organism, sep=""))
+        if (r$headers$status != 200) {
+            stop_for_status(r)
+        } 
+        else {
+            tmp <- content(r)
+            download.file( tmp$data, destfile )
             return(parseCompendium(destfile))
         }
-    } else {
-        return(parseCompendium(destfile))
-    }
+    } else {}
+    return(parseCompendium(destfile))
 }
 #' This method allows importing the full compendium for the selected organism from a local file
 #'
@@ -218,26 +199,16 @@ parseCompendium <- function(destfile){
 #' }
 #'
 listAnnotationTypes <- function(organism="ecoli"){
-    header.field = c('Content-Type' = "application/json")
-    curl <- getCurlHandle() 
-    curlSetOpt(.opts = list(httpheader = header.field, verbose = FALSE), curl = curl) 
-    t <- basicTextGatherer()
-    h <- basicHeaderGatherer()
-    body = curlPerform(url=paste("http://rest.colombos.net/get_annotation_types/", organism, sep=""),
-                       curl = curl,
-                       writefunction = t$update,
-                       headerfunction = h$update)
-    output <- list(data = t$value(),
-                   status = h$value()[['status']],
-                   status.message = h$value()[['statusMessage']])
-    httpstatus <- as.numeric(output$status)
-    if (httpstatus != 200) {
-        return(output$status.message)
-    } else {
-        tmp <- fromJSON(output$data, nullValue = NA)$data;
-        response <- data.frame(matrix(unlist(tmp, recursive=F), length(tmp), 2, byrow=T))
+    
+    r <- GET("http://rest.colombos.net/",path = paste("get_annotation_types/",organism, sep=""))
+    if (r$headers$status != 200) {
+        stop_for_status(r)
+    }
+    else {
+        tmp <- content(r)
+        response <- data.frame(matrix(unlist(tmp$data, recursive=F), length(tmp$data), 2, byrow=T))
         for (i in 1:2) {
-            response[,i] <- sapply(response[,i], as.character) # sanitize the list in the df
+            response[,i] = as.character(response[,i])
         }
         colnames(response) <- c("name", "description")
         return(response)
@@ -267,26 +238,14 @@ listAnnotationTypes <- function(organism="ecoli"){
 #'
 listEntities <- function(organism="ecoli", annotation="Pathway"){
     if(is.null(annotation)) stop("Insert a string with the annotation type.\n See listAnnotationTypes for the available types.") else {}
-    #
-    t <- basicTextGatherer()
-    h <- basicHeaderGatherer()
-    curlPerform( url = paste("http://rest.colombos.net/get_entities", organism, gsub(" ","%20", annotation), sep="/"),
-                 .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
-                 curl = getCurlHandle(),
-                 writefunction = t$update,
-                 headerfunction = h$update
-    ) 
-    
-    output <- list(data = t$value(),
-                   status = h$value()[['status']],
-                   status.message = h$value()[['statusMessage']])
-    httpstatus <- as.numeric(output$status)
-    if (httpstatus != 200) {
-        return(output$status.message)
-    }  else {
-        tmp <- fromJSON(output$data, nullValue = NA)$data;
-            response = suppressWarnings( unlist(tmp) )
-
-        return(response)
+    r <- GET("http://rest.colombos.net/",path = paste("get_entities",organism, gsub(" ","%20", annotation), sep="/"))
+    if (r$headers$status != 200) {
+        stop_for_status(r)    # Check the request succeeded
+        #return(r$headers$statusmessage)
+    }
+    else {
+        # Automatically parse the json output
+        tmp <- content(r)
+        return(unlist(tmp$data))
     }
 }
