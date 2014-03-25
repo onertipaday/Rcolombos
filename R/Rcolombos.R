@@ -210,12 +210,12 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
     } else {
         tmp <- content(r)
         if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
+            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
             colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
         } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
             colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
         }
         return(response)
@@ -279,12 +279,12 @@ advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_
     } else {
         tmp <- content(r)
         if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
+            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
             colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
         } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
             colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
         }
         return(response)
