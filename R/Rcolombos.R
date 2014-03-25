@@ -141,8 +141,6 @@ advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, b
 #'
 advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE, g_search_type="genes", ann_type){
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
-    t <- basicTextGatherer()
-    h <- basicHeaderGatherer()
     if(g_search_type=="genes"){
         url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "genes", paste(ids, collapse=","), sep="/")
     }
@@ -155,28 +153,19 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
     } else {
         stop("Wrong search_type: it should be either genes, go or annotation!")
     }
-    curlPerform( url = url_string,
-                 .opts = list(httpheader = c('Content-Type' = "application/json"), verbose = FALSE),
-                 curl = getCurlHandle(),
-                 writefunction = t$update,
-                 headerfunction = h$update
-    ) 
-    output <- list(data = t$value(),
-                   status = h$value()[['status']],
-                   status.message = h$value()[['statusMessage']])
-    httpstatus <- as.numeric(output$status)
-    if (httpstatus != 200) {
-        return(output$status.message)
-    }  else {
-        tmp <- fromJSON(output$data, nullValue = NA)$data;
+    r <- GET(url_string)
+    if (r$headers$status != 200) {
+        stop_for_status(r)
+    } else {
+        tmp <- content(r)
         if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
-                                                           nrow=length(tmp$geneNames), ncol=length(tmp$contrasts), byrow=T)))
-            colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneNames
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+                                                           nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
+            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
         } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$Mvalues), 
-                                                           nrow=length(tmp$geneLocustags), ncol=length(tmp$contrasts), byrow=T)) )
-            colnames(response) <- tmp$contrasts; rownames(response) <- tmp$geneLocustags
+            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+                                                           nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
         }
         return(response)
     }
