@@ -185,12 +185,6 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
 #'
 #' @export
 #' 
-#' @examples
-#' \dontrun{
-#' c.cn <- advanced_search_by_contrasts(organism="bsubt", 
-#' ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
-#' }
-#' 
 advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, c_search_type=NULL){
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     if(c_search_type=="contrast_names"){
@@ -244,12 +238,6 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
 #' @references http://colombos.net
 #'
 #' @export
-#' 
-#' @examples
-#' \dontrun{
-#' c.cn <- advanced_search_by_contrasts(organism="bsubt", 
-#' ids=c("GSM27217.ch2-vs-GSM27217.ch1","GSM27218.ch1-vs-GSM27218.ch2"), search_type="contrast_names")
-#' }
 #' 
 advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_type, ann_type, c_search_type){
     if(is.null(g_ids)) stop("Insert a character vector with the g_ids to be imputed.") else {}
