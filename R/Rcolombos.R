@@ -25,24 +25,17 @@
 #'  heatmap(as.matrix(my_module), col=terrain.colors(15))
 #' }
 #'
-
 quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
     if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
-    r <- GET("http://rest.colombos.net/",path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
+    r <- GET("http://rest.colombos.net/", path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
     if (r$headers$status != 200) {
         stop_for_status(r)
-    }
-    else {
+    } else {
         tmp <- content(r)
-        if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
-        } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
-        }
+        response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+        nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+        colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
+        if (geneNames) rownames(response) <- tmp$data$geneNames
         return(response)
     }
 }
@@ -158,15 +151,10 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
         stop_for_status(r)
     } else {
         tmp <- content(r)
-        if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
-        } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
-                                                           nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
-        }
+        response = suppressWarnings( data.frame(matrix(as.numeric(tmp$data$Mvalues), 
+        nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+        colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags       
+        if (geneNames) rownames(response) <- tmp$data$geneNames
         return(response)
     }
 }
@@ -209,15 +197,10 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
         stop_for_status(r)
     } else {
         tmp <- content(r)
-        if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
-            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
-        } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
-            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
-        }
+        response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+        nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+        colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
+        if (geneNames) rownames(response) <- tmp$data$geneNames
         return(response)
     }
 }
@@ -278,15 +261,10 @@ advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_
         stop_for_status(r)
     } else {
         tmp <- content(r)
-        if (geneNames){
-            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
-            nrow=length(tmp$data$geneNames), ncol=length(tmp$data$contrasts), byrow=T)))
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneNames
-        } else {
-            response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
-            nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
-            colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
-        }
+        response = suppressWarnings( data.frame(matrix(as.numeric(sapply(tmp$data$Mvalues, as.character)), 
+        nrow=length(tmp$data$geneLocustags), ncol=length(tmp$data$contrasts), byrow=T)) )
+        colnames(response) <- tmp$data$contrasts; rownames(response) <- tmp$data$geneLocustags
+        if (geneNames) rownames(response) <- tmp$data$geneNames
         return(response)
     }
 }

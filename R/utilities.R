@@ -240,11 +240,8 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
     if(is.null(annotation)) stop("Insert a string with the annotation type.\n See listAnnotationTypes for the available types.") else {}
     r <- GET("http://rest.colombos.net/",path = paste("get_entities",organism, gsub(" ","%20", annotation), sep="/"))
     if (r$headers$status != 200) {
-        stop_for_status(r)    # Check the request succeeded
-        #return(r$headers$statusmessage)
-    }
-    else {
-        # Automatically parse the json output
+        stop_for_status(r)
+    } else {
         tmp <- content(r)
         return(unlist(tmp$data))
     }

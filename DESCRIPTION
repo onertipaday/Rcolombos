@@ -10,9 +10,7 @@ Description: This package provides programmatic access to Colombos, a web based
     cross-platform expression compendia of bacterial organisms.
 License: GPL-3
 Depends:
-    httr,
-    RCurl,
-    RJSONIO
+    httr
 Repository: CRAN
 URL: http://colombos.net/
 Collate:
