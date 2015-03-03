@@ -1,11 +1,11 @@
 Package: Rcolombos
 Type: Package
-Title: Interface to Colombos Compendia using the exposed REST API
-Version: 1.5.1
+Title: Interface to Colombos Compendia using the Exposed REST API
+Version: 1.5.2
 Date: 2013-06-26
 Author: Paolo Sonego <paolo.sonego@fmach.it>
 Maintainer: Paolo Sonego <paolo.sonego@fmach.it>
-Description: This package provides programmatic access to Colombos, a web based
+Description: Provides programmatic access to Colombos, a web based
     interface for exploring and analyzing comprehensive organism-specific
     cross-platform expression compendia of bacterial organisms.
 License: GPL-3
