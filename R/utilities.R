@@ -14,7 +14,7 @@
 #'
 listOrganisms <- function () {
     r <- GET("http://rest.colombos.net/", path = "get_organisms")
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r) # Check the request succeeded
     }
     else {
@@ -47,7 +47,7 @@ listOrganisms <- function () {
 #'
 listGenes <- function(organism="ecoli") {
     r <- GET("http://rest.colombos.net/",path = paste("get_genes/",organism, sep=""))
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r)    # Check the request succeeded
     }
     else {
@@ -83,7 +83,7 @@ listGenes <- function(organism="ecoli") {
 listContrasts <- function(organism="ecoli"){
     
     r <- GET("http://rest.colombos.net/",path = paste("get_contrasts/",organism, sep=""))
-    if (r$headers$status != 200) {
+    if (r$status_code!= 200) {
         stop_for_status(r)    # Check the request succeeded
         #return(r$headers$statusmessage)
     }
@@ -128,7 +128,7 @@ getCompendium <- function(organism="hpylo", path=NULL){
     destfile <- paste(path,"/",organism, "_compendium_data.zip",sep="")
     if(!file.exists(destfile)){
         r <- GET("http://rest.colombos.net/",path = paste("get_organism_data/",organism, sep=""))
-        if (r$headers$status != 200) {
+        if (r$status_code!= 200) {
             stop_for_status(r)
         } 
         else {
@@ -201,7 +201,7 @@ parseCompendium <- function(destfile){
 listAnnotationTypes <- function(organism="ecoli"){
     
     r <- GET("http://rest.colombos.net/",path = paste("get_annotation_types/",organism, sep=""))
-    if (r$headers$status != 200) {
+    if (r$status_code!= 200) {
         stop_for_status(r)
     }
     else {
@@ -239,7 +239,7 @@ listAnnotationTypes <- function(organism="ecoli"){
 listEntities <- function(organism="ecoli", annotation="Pathway"){
     if(is.null(annotation)) stop("Insert a string with the annotation type.\n See listAnnotationTypes for the available types.") else {}
     r <- GET("http://rest.colombos.net/",path = paste("get_entities",organism, gsub(" ","%20", annotation), sep="/"))
-    if (r$headers$status != 200) {
+    if (r$status_code!= 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)

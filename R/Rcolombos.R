@@ -28,7 +28,7 @@
 quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
     if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
     r <- GET("http://rest.colombos.net/", path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)
@@ -147,7 +147,7 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
         stop("Wrong search_type: it should be either genes, go or annotation!")
     }
     r <- GET(url_string)
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)
@@ -193,7 +193,7 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
         stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
     }
     r <- GET(url_string)
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)
@@ -257,7 +257,7 @@ advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_
         stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
     }
     r <- GET(url_string)
-    if (r$headers$status != 200) {
+    if (r$status_code != 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)
