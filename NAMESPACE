@@ -1,4 +1,6 @@
 import(httr)
+importFrom("stats", "na.omit")
+importFrom("utils", "download.file", "read.csv", "unzip")
 export(advanced_search)
 export(getCompendium)
 export(listAnnotationTypes)
