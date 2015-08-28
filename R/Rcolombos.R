@@ -27,7 +27,7 @@
 #'
 quick_search <- function(organism="ecoli", genes, geneNames=FALSE){
     if(is.null(genes)) stop("Insert a character vector with the genes to be imputed.") else {}
-    r <- GET("http://rest.colombos.net/", path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
+    r <- GET("http://rest.colombos.fmach.it/", path = paste("quick_search",organism, paste(genes, collapse=","), sep="/"))
     if (r$status_code != 200) {
         stop_for_status(r)
     } else {
@@ -135,13 +135,13 @@ advanced_search <- function(organism=NULL, g_ids=NULL, geneNames=FALSE, c_ids, b
 advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE, g_search_type="genes", ann_type){
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     if(g_search_type=="genes"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "genes", paste(ids, collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_genes", organism, "genes", paste(ids, collapse=","), sep="/")
     }
     else if(g_search_type=="go"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_genes", organism, "go", gsub(" ","%20", ids), sep="/")
     }
     else if(g_search_type=="annotation"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), 
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_genes", organism, "annotation", gsub(" ","%20", ann_type), 
                             gsub(" ","%20", ids), sep="/")  
     } else {
         stop("Wrong search_type: it should be either genes, go or annotation!")
@@ -176,19 +176,19 @@ advanced_search_by_genes <- function(organism="bsubt", ids=NULL, geneNames=FALSE
 advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALSE, c_search_type=NULL){
     if(is.null(ids)) stop("Insert the ids for the specific search_type.") else {}
     if(c_search_type=="contrast_names"){
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "contrast_names", paste(ids, collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "contrast_names", paste(ids, collapse=","), sep="/")
     }
     else if(c_search_type=="experiment"){
-        # url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "experiment", paste(gsub(" ","%20", ids), collapse=","), sep="/")
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "experiment", gsub(" ","%20", ids), sep="/")
+        # url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "experiment", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "experiment", gsub(" ","%20", ids), sep="/")
     }
     else if(c_search_type=="go"){
-        # url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "go", paste(gsub(" ","%20", ids), collapse=","), sep="/")
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "go", gsub(" ","%20", ids), sep="/")
+        # url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "go", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "go", gsub(" ","%20", ids), sep="/")
     }
     else if(c_search_type=="condition"){
-        # url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "condition", paste(gsub(" ","%20", ids), collapse=","), sep="/")
-        url_string <- paste("http://rest.colombos.net/advanced_search_by_contrast", organism, "condition", paste(ids, collapse=","), sep="/")
+        # url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "condition", paste(gsub(" ","%20", ids), collapse=","), sep="/")
+        url_string <- paste("http://rest.colombos.fmach.it/advanced_search_by_contrast", organism, "condition", paste(ids, collapse=","), sep="/")
     } else {
         stop("Wrong search_type: it should be either contrast_names, experiment, go or condition!")
     }
@@ -225,7 +225,7 @@ advanced_search_by_contrasts <- function(organism=NULL, ids=NULL, geneNames=FALS
 advanced_search_by_both <- function(organism, g_ids, geneNames, c_ids, g_search_type, ann_type, c_search_type){
     if(is.null(g_ids)) stop("Insert a character vector with the g_ids to be imputed.") else {}
     if(is.null(c_ids)) stop("Insert a character vector with the c_ids to be imputed.") else {}
-    base_url <- "http://rest.colombos.net/advanced_search_by_both"
+    base_url <- "http://rest.colombos.fmach.it/advanced_search_by_both"
     if(g_search_type=="genes"){
         g_string <- paste(base_url, organism, "genes", paste(g_ids, collapse=","), sep="/")
     }
