@@ -2,7 +2,6 @@ Package: Rcolombos
 Type: Package
 Title: Interface to Colombos Compendia using the Exposed REST API
 Version: 1.5.3
-Date: 2013-06-26
 Author: Paolo Sonego <paolo.sonego@fmach.it>
 Maintainer: Paolo Sonego <paolo.sonego@fmach.it>
 Description: Provides programmatic access to Colombos, a web based
@@ -12,7 +11,7 @@ License: GPL-3
 Depends:
     httr
 Repository: CRAN
-URL: http://colombos.net/
+URL: http://colombos.net/,http://colombos.fmach.it/
 Collate:
     'Rcolombos.R'
     'utilities.R'
