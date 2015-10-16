@@ -1,6 +1,6 @@
 #' Select the COLOMBOS REST API version to be used for retrieving data
 #'
-#' @param positive number 2 or 3 - 3 (current REST API version) as default
+#' @param version positive number 2 or 3 - 3 (current REST API version) as default
 #'
 #' @references http://colombos.net
 #'

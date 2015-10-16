@@ -7,7 +7,7 @@
 switchVersion(version = 3)
 }
 \arguments{
-\item{positive}{number 2 or 3 - 3 (current REST API version) as default}
+\item{version}{positive number 2 or 3 - 3 (current REST API version) as default}
 }
 \description{
 Select the COLOMBOS REST API version to be used for retrieving data
