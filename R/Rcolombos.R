@@ -1,3 +1,13 @@
+#' @title Interface to Colombos Compendia using the Exposed REST API
+#' @name Rcolombos
+#' @description Provides programmatic access to Colombos, a web based
+#'interface for exploring and analyzing comprehensive organism-specific
+#'cross-platform expression compendia of bacterial organisms.
+#' 
+#' @docType package
+#' @aliases Rcolombos Rcolombos-package
+NULL
+
 #' This method mimics the quick_search functionality of Colombos.
 #' It takes a string containg the nickname for the selected organism and a vector of string 
 #' representing the genes of interest for the specified organism and returns a list containing 

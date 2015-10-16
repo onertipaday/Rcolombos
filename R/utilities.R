@@ -1,3 +1,24 @@
+#' Select the COLOMBOS REST API version to be used for retrieving data
+#'
+#' @param positive number 2 or 3 - 3 (current REST API version) as default
+#'
+#' @references http://colombos.net
+#'
+#' @examples
+#' \dontrun{
+#' library('Rcolombos')
+#' switchVersion (version = 2) # switch from COLOMBOS REST API 3 to 2
+#' }
+#'
+#' @export
+switchVersion <- function(version = 3) {
+    #if (is.null(version)) stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
+    if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
+    else if (version==2) options("REST.version"="http://rest.colombos.net/")
+    else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
+    message(paste("COLOMBOS REST version", version, "REST URL", getOption("REST.version")))
+}
+
 #' Returns a character vector corresponding to the currently available organisms.
 #'
 #' @return A list containing the currently available organisms.
