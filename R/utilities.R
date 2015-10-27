@@ -14,7 +14,7 @@
 switchVersion <- function(version = 3) {
     #if (is.null(version)) stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
     if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
-    else if (version==2) options("REST.version"="http://rest.colombos.net/")
+    else if (version==2) options("REST.version"="http://rest.legacyv2.colombos.net/")
     else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
     message(paste("COLOMBOS REST version", version, "REST URL", getOption("REST.version")))
 }
