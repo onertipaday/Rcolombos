@@ -13,7 +13,8 @@
 #' @export
 switchVersion <- function(version = 3) {
     #if (is.null(version)) stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
-    if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
+    # if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
+    if (version==3) options("REST.version"="http://luca.colombos-dev.fmach.it/")
     else if (version==2) options("REST.version"="http://rest.legacyv2.colombos.net/")
     else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
     message(paste("COLOMBOS REST version", version, "REST URL", getOption("REST.version")))
@@ -267,3 +268,41 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
         return(unlist(tmp$data))
     }
 }
+
+#' This method allows to retrieve all the annotations for the Reference and Test conditions for a selected organism (nickname) and for a user specified contrast name. Please be aware that only one contrast is allowed in input. It returns a list containing both ReferenceAnnnotation and TestAnnotation.
+#' and return the available entities
+#'
+#' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
+#' the available organisms.
+#' @param contrast_name annotation A character containing the selected contrast_name type: use \code{\link{listContrasts}} to display the available contrast names.
+#' 
+#' @return A list of two data.frame, ReferenceAnnnotation and TestAnnotation, containing 2 columns: both the properties and the values for the selected contrast
+#'
+#' @references http://colombos.net
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'  library("Rcolombos")
+#'  bsubt.annotations <- get_contrast_annotations(organism="bsubt", contrast_name="GSM27217.ch2-vs-GSM27217.ch1")
+#' }
+#'
+get_contrast_annotations <- function(organism="bsubt", contrast_name="GSM27217.ch2-vs-GSM27217.ch1"){
+    if(is.null(contrast_name)) stop("Insert a string with contrast_name\n See listAnnotationTypes for the available types.") else {}
+    # r <- GET(getOption("REST.version"),path = paste("get_entities",organism, contrast_name, sep="/"))
+    r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this command with the correct REST URL
+    if (r$status_code!= 200) {
+        stop_for_status(r)
+    } else {
+        tmp <- content(r)
+#         ReferenceAnnotation <- data.frame(matrix(strsplit(unlist(tmp$data$ReferenceAnnotation),":"),ncol=2, byrow=T))
+#         colnames(ReferenceAnnotation) <- c("property","values")
+#         TestAnnotation = data.frame(matrix(strsplit(unlist(tmp$data$TestAnnotation),":"),ncol=2, byrow=T))
+#         colnames(TestAnnotation) <- c("property","values")
+        # return(tmp$data)
+        # return(list(ReferenceAnnotation=unlist(tmp$data$ReferenceAnnotation),TestAnnotations=unlist(tmp$data$TestAnnotation)))
+        return(list(ReferenceAnnotation=setNames(do.call(rbind.data.frame, strsplit(unlist(tmp$data$ReferenceAnnotation),":")), c("property", "value")), TestAnnotation=setNames(do.call(rbind.data.frame, strsplit(unlist(tmp$data$TestAnnotation),":")), c("property", "value"))))
+    }
+}
+
