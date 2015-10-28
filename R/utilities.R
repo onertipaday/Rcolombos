@@ -192,11 +192,13 @@ parseCompendium <- function(destfile){
     ## condition annotations 
     temp <- paste(out_dir, files[grep("colombos_[a-z]+_condannot_[0-9]+.txt", files)], sep="/")
     condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
-    ## condition ontology
-    temp <- paste(out_dir, files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)], sep="/")
-    condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
+    ## condition ontology - remove this field
+    # temp <- paste(out_dir, files[grep("colombos_[a-z]+_condontol_[0-9]+.txt", files)], sep="/")
+    # condontol <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
     ## return a list with three data.frame
-    return( list(exprdata=exprdata, condannot=condannot, condontol=condontol) )
+    # return( list(exprdata=exprdata, condannot=condannot, condontol=condontol) )
+    return( list(exprdata=exprdata, condannot=condannot) )
+    # return( list(exprdata=exprdata, refcondannot=testcondannot, testcondannot=testcondannot) )
 }
 
 
@@ -289,19 +291,13 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
 #' }
 #'
 get_contrast_annotations <- function(organism="bsubt", contrast_name="GSM27217.ch2-vs-GSM27217.ch1"){
-    if(is.null(contrast_name)) stop("Insert a string with contrast_name\n See listAnnotationTypes for the available types.") else {}
+    if(is.null(contrast_name)) stop("Insert a string with contrast_name\n See listContrasts for the available contrast names.") else {}
     # r <- GET(getOption("REST.version"),path = paste("get_entities",organism, contrast_name, sep="/"))
-    r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this command with the correct REST URL
+    r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this line inidcating the correct REST URL
     if (r$status_code!= 200) {
         stop_for_status(r)
     } else {
         tmp <- content(r)
-#         ReferenceAnnotation <- data.frame(matrix(strsplit(unlist(tmp$data$ReferenceAnnotation),":"),ncol=2, byrow=T))
-#         colnames(ReferenceAnnotation) <- c("property","values")
-#         TestAnnotation = data.frame(matrix(strsplit(unlist(tmp$data$TestAnnotation),":"),ncol=2, byrow=T))
-#         colnames(TestAnnotation) <- c("property","values")
-        # return(tmp$data)
-        # return(list(ReferenceAnnotation=unlist(tmp$data$ReferenceAnnotation),TestAnnotations=unlist(tmp$data$TestAnnotation)))
         return(list(ReferenceAnnotation=setNames(do.call(rbind.data.frame, strsplit(unlist(tmp$data$ReferenceAnnotation),":")), c("property", "value")), TestAnnotation=setNames(do.call(rbind.data.frame, strsplit(unlist(tmp$data$TestAnnotation),":")), c("property", "value"))))
     }
 }
