@@ -14,10 +14,16 @@ the available organisms.}
 if already retrieved}
 }
 \value{
-A list containing three data.frame:
+A list containing two or three data.frames.
+
+In case \code{\link{switchVersion}} is equal to 2:
 \item{exprdata}{the full compendium for the selected organism}
 \item{condannot}{The condition annotation for the selected organism}
-\item{condontol}{the condition ontology for the selected organism}
+
+In case \code{\link{switchVersion}} is equal to 3:
+\item{exprdata}{the full compendium for the selected organism}
+\item{refannot}{The condition annotation for the reference contrasts}
+\item{testannot}{The condition annotation for the test contrasts}
 }
 \description{
 This method allows to download/import the full compendium for the selected organism
