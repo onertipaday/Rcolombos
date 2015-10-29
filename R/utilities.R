@@ -13,7 +13,8 @@
 #' @export
 switchVersion <- function(version = 3) {
     # if (version==3) options("REST.version"="http://luca.colombos-dev.fmach.it/")
-    if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
+    # if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
+    if (version==3) options("REST.version"="http://rest.colombos.net/")
     else if (version==2) options("REST.version"="http://rest.legacyv2.colombos.net/")
     else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
     message(paste("COLOMBOS REST version", version, "REST URL", getOption("REST.version")))
@@ -199,6 +200,7 @@ parseCompendium <- function(destfile){
     exprdata <- exprdata[,c(2:dim(exprdata)[[2]])] 
     colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
     ## condition annotations 
+    # if(getOption("REST.version")=="http://rest.colombos.fmach.it/"){
     if(getOption("REST.version")=="http://rest.colombos.net/"){
         temp <- paste(out_dir, files[grep("colombos_[a-z]+_refannot_[0-9]+.txt", files)], sep="/")
         refannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
