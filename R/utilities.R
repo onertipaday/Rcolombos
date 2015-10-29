@@ -12,7 +12,8 @@
 #'
 #' @export
 switchVersion <- function(version = 3) {
-    if (version==3) options("REST.version"="http://luca.colombos-dev.fmach.it/")
+    # if (version==3) options("REST.version"="http://luca.colombos-dev.fmach.it/")
+    if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
     else if (version==2) options("REST.version"="http://rest.legacyv2.colombos.net/")
     else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
     message(paste("COLOMBOS REST version", version, "REST URL", getOption("REST.version")))
@@ -305,8 +306,8 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
 #'
 get_contrast_annotations <- function(organism="bsubt", contrast_name="GSM27217.ch2-vs-GSM27217.ch1"){
     if(is.null(contrast_name)) stop("Insert a string with contrast_name\n See listContrasts for the available contrast names.") else {}
-    # r <- GET(getOption("REST.version"),path = paste("get_entities",organism, contrast_name, sep="/"))
-    r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this line inidcating the correct REST URL
+    r <- GET(getOption("REST.version"),path = paste("get_contrast_annotations",organism, contrast_name, sep="/"))
+    # r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this line inidcating the correct REST URL
     if (r$status_code!= 200) {
         stop_for_status(r)
     } else {
