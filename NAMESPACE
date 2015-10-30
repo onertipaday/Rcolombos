@@ -1,4 +1,5 @@
 import(httr)
+importFrom("stats", "setNames")
 importFrom("stats", "na.omit")
 importFrom("utils", "download.file", "read.csv", "unzip")
 export(advanced_search)

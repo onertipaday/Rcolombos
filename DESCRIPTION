@@ -1,7 +1,7 @@
 Package: Rcolombos
 Type: Package
 Title: Interface to Colombos Compendia using the Exposed REST API
-Version: 2.0.0
+Version: 2.0.1
 Author: Paolo Sonego <paolo.sonego@fmach.it>
 Maintainer: Paolo Sonego <paolo.sonego@fmach.it>
 Description: Provides programmatic access to Colombos, a web based
