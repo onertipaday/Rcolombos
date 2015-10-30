@@ -12,8 +12,6 @@
 #'
 #' @export
 switchVersion <- function(version = 3) {
-    # if (version==3) options("REST.version"="http://luca.colombos-dev.fmach.it/")
-    # if (version==3) options("REST.version"="http://rest.colombos.fmach.it/")
     if (version==3) options("REST.version"="http://rest.colombos.net/")
     else if (version==2) options("REST.version"="http://rest.legacyv2.colombos.net/")
     else stop("Select COLOMBOS REST API version to use: 2 or 3 (3 default)")
@@ -200,7 +198,6 @@ parseCompendium <- function(destfile){
     exprdata <- exprdata[,c(2:dim(exprdata)[[2]])] 
     colnames(exprdata) = my_cols; exprdata <- exprdata[,c(2:dim(exprdata)[[2]])]
     ## condition annotations 
-    # if(getOption("REST.version")=="http://rest.colombos.fmach.it/"){
     if(getOption("REST.version")=="http://rest.colombos.net/"){
         temp <- paste(out_dir, files[grep("colombos_[a-z]+_refannot_[0-9]+.txt", files)], sep="/")
         refannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
@@ -213,7 +210,6 @@ parseCompendium <- function(destfile){
         condannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
         return( list(exprdata=exprdata, condannot=condannot) )
     } else return(NULL)
-    # return( list(exprdata=exprdata, refcondannot=testcondannot, testcondannot=testcondannot) )
 }
 
 
@@ -309,7 +305,6 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
 get_contrast_annotations <- function(organism="bsubt", contrast_name="GSM27217.ch2-vs-GSM27217.ch1"){
     if(is.null(contrast_name)) stop("Insert a string with contrast_name\n See listContrasts for the available contrast names.") else {}
     r <- GET(getOption("REST.version"),path = paste("get_contrast_annotations",organism, contrast_name, sep="/"))
-    # r <- GET(getOption("REST.version"),path = paste("colombos/cgi-bin/index.php/get_contrast_annotations",organism, contrast_name, sep="/")) # change this line inidcating the correct REST URL
     if (r$status_code!= 200) {
         stop_for_status(r)
     } else {
