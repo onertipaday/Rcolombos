@@ -27,10 +27,10 @@ switchVersion <- function(version = 3) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' 
 #' library('Rcolombos')
 #' listOrganisms()
-#' }
+#' 
 #'
 listOrganisms <- function () {
     r <- GET(getOption("REST.version"), path = "get_organisms")

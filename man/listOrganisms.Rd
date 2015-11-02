@@ -13,10 +13,8 @@ A list containing the currently available organisms.
 Returns a character vector corresponding to the currently available organisms.
 }
 \examples{
-\dontrun{
 library('Rcolombos')
 listOrganisms()
-}
 }
 \references{
 http://colombos.net
