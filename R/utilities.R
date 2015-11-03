@@ -1,9 +1,6 @@
 #' Select the COLOMBOS REST API version to be used for retrieving data
-#'
 #' @param version positive number 2 or 3 - 3 (current REST API version) as default
-#'
 #' @references http://colombos.net
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -19,19 +16,12 @@ switchVersion <- function(version = 3) {
 }
 
 #' Returns a character vector corresponding to the currently available organisms.
-#'
 #' @return A list containing the currently available organisms.
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
-#' 
 #' library('Rcolombos')
 #' listOrganisms()
-#' 
-#'
 listOrganisms <- function () {
     r <- GET(getOption("REST.version"), path = "get_organisms")
     if (r$status_code != 200) {
@@ -48,17 +38,12 @@ listOrganisms <- function () {
 
 #' This method takes as parameter a single string, representing an organism,
 #' and returns a character vector corresponding to the currently available organisms.
-#'
 #' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#'
 #' @return A data.frame containing the locustag and description
 #' of all the genes for the selected organism.
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -83,17 +68,12 @@ listGenes <- function(organism="ecoli") {
 
 #' This method takes as parameter a single string, representing an organism,
 #' and returns a character vector corresponding to the currently available organisms.
-#'
 #' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#'
 #' @return A data.frame containing the contrasts and GSM
 #' of all the contrasts for the selected organism.
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -119,28 +99,20 @@ listContrasts <- function(organism="ecoli"){
 }
 
 #' This method allows to download/import the full compendium for the selected organism
-#'
 #' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#'
 #' @param path A string indicating the path where the file will be either downloaded or read,
 #' if already retrieved
-#' 
 #' @return A list containing two or three data.frames.
-#'  
 #' In case \code{\link{switchVersion}} is equal to 2:
 #' \item{exprdata}{the full compendium for the selected organism}
 #' \item{condannot}{The condition annotation for the selected organism}
-#' 
 #' In case \code{\link{switchVersion}} is equal to 3:
 #' \item{exprdata}{the full compendium for the selected organism}
 #' \item{refannot}{The condition annotation for the reference contrasts}
 #' \item{testannot}{The condition annotation for the test contrasts}
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -164,24 +136,17 @@ getCompendium <- function(organism="hpylo", path=NULL){
     return(parseCompendium(destfile))
 }
 #' This method allows importing the full compendium for the selected organism from a local file
-#'
 #' @param destfile A character containing the full path of the downloaded file
-#'
 #' @return A list containing two or three data.frames.
-#'  
 #' In case \code{\link{switchVersion}} is equal to 2:
 #' \item{exprdata}{the full compendium for the selected organism}
 #' \item{condannot}{The condition annotation for the selected organism}
-#' 
 #' In case \code{\link{switchVersion}} is equal to 3:
 #' \item{exprdata}{the full compendium for the selected organism}
 #' \item{refannot}{The condition annotation for the reference contrasts}
 #' \item{testannot}{The condition annotation for the test contrasts}
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -216,17 +181,12 @@ parseCompendium <- function(destfile){
 
 #' This method takes as parameter a string (the nickname of an organism) and returns a character vector 
 #' corresponding to the currently available annotation type for the selected organism.
-#'
 #' @param organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
-#'
 #' @return A data.frame containing the name and description of the annotation
 #' for the selected organism.
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' library('Rcolombos')
@@ -250,20 +210,15 @@ listAnnotationTypes <- function(organism="ecoli"){
     }
 }
 
-#' This method takes a string containing the nickname for the selected organism and a string containing the annotation type
-#' and return the available entities
-#'
+#' This method takes a string containing the nickname for the selected organism 
+#' and a string containing the annotation type. It returns the available entities
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
 #' @param annotation A character containing the selected annotation type: use \code{\link{listAnnotationTypes}} to display
 #' the available types.
-#' 
 #' @return A vector containing the available entities for the selected annotation type.
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")
@@ -283,18 +238,12 @@ listEntities <- function(organism="ecoli", annotation="Pathway"){
 }
 
 #' This method allows to retrieve all the annotations for the Reference and Test conditions for a selected organism (nickname) and for a user specified contrast name. Please be aware that only one contrast is allowed in input. It returns a list containing both ReferenceAnnnotation and TestAnnotation.
-#' and return the available entities
-#'
 #' @param  organism A character containing the organism id: use \code{\link{listOrganisms}} to display
 #' the available organisms.
 #' @param contrast_name annotation A character containing the selected contrast_name type: use \code{\link{listContrasts}} to display the available contrast names.
-#' 
 #' @return A list of two data.frame, ReferenceAnnnotation and TestAnnotation, containing 2 columns: both the properties and the values for the selected contrast
-#'
 #' @references http://colombos.net
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #'  library("Rcolombos")

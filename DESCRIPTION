@@ -16,3 +16,4 @@ Collate:
     'Rcolombos.R'
     'utilities.R'
     'zzz.R'
+RoxygenNote: 5.0.0
