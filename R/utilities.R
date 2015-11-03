@@ -166,8 +166,10 @@ parseCompendium <- function(destfile){
     if(getOption("REST.version")=="http://rest.colombos.net/"){
         temp <- paste(out_dir, files[grep("colombos_[a-z]+_refannot_[0-9]+.txt", files)], sep="/")
         refannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
+        refannot <- data.frame(ContrastName=refannot$ContrastName,setNames(do.call(rbind.data.frame,strsplit(unlist(refannot$RefAnnotation),":")), nm=c("property", "value")))
         temp <- paste(out_dir, files[grep("colombos_[a-z]+_testannot_[0-9]+.txt", files)], sep="/")
         testannot <- read.csv(temp, stringsAsFactors=FALSE, sep="\t", header=T, quote="")
+        testannot <- data.frame(ContrastName=testannot$ContrastName,setNames(do.call(rbind.data.frame,strsplit(unlist(testannot$TestAnnotation),":")), nm=c("property", "value")))
         return( list(exprdata=exprdata, refannot=refannot, testannot=testannot) )
 
     } else if(getOption("REST.version")=="http://rest.legacyv2.colombos.net/") {
